@@ -1,0 +1,4 @@
+Integer identities, all coefficient rows, published values, direct DP log, brute force: PASS
+a_6,13 = 2381437338960
+First strict half-probability crossing: 13 (monotonicity proof in report)
+This is an executable certificate check, not a Lean kernel proof.

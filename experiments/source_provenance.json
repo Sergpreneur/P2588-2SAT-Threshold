@@ -1,0 +1,51 @@
+{
+  "retrieved_utc": "2026-10-19T22:18:06.789650+00:00",
+  "arxiv": "https://arxiv.org/abs/2108.08067v2",
+  "journal_doi": "10.5070/C63261985",
+  "journal_article_number": 7,
+  "repository": "https://gitlab.com/sergey-dovgal/enumeration-2sat-aux",
+  "commit": "346079fa8606ebd48f4557bcef7bc1f73a2aed4d",
+  "master_latest_commit_api": "346079fa8606ebd48f4557bcef7bc1f73a2aed4d",
+  "files": [
+    {
+      "downloaded_as": "paper_source.pdf",
+      "bytes": 603895,
+      "sha256": "fd77d4420fd468151dafaeb1fe43cc121bd74a90c64354c1f60c2fafd45b921e"
+    },
+    {
+      "downloaded_as": "companion_readme.txt",
+      "bytes": 3704,
+      "sha256": "9a4a62e214ef77c91674a46decad5f647b12293f2ae2519bae782be1200a90e5"
+    },
+    {
+      "downloaded_as": "source_Sequences.ipynb",
+      "bytes": 10447,
+      "sha256": "fc7acc9003efef741e37619f9f7ff7aa014298ce23c508b9cb04af9e27d7fcf3"
+    },
+    {
+      "downloaded_as": "source_bfps.py",
+      "bytes": 8247,
+      "sha256": "c2b60a0bc3ce1490a021c8ba116b15aa0c2fbc78905c62ace5ae5fe5d2ba25aa"
+    },
+    {
+      "downloaded_as": "source_exhaustive_digraph_enumeration.py",
+      "bytes": 1102,
+      "sha256": "37293a26088e2803dc0188c6381d2a0ca7dbe1b74ddc17a4e7695b2fe208ce41"
+    },
+    {
+      "downloaded_as": "source_exhaustive_two_sat_enumeration.py",
+      "bytes": 1751,
+      "sha256": "01aa4b5da9a7519a84b4a17d52a44cbd63f2c50037433ced6801bb997b0a0e79"
+    },
+    {
+      "downloaded_as": "source_generating_function_digraph_enumeration.py",
+      "bytes": 1395,
+      "sha256": "ad042f0687914e2571896da975d3efe7d1c8792aab97439f8c06cc256e98ecb2"
+    },
+    {
+      "downloaded_as": "source_generating_function_two_sat_enumeration.py",
+      "bytes": 2340,
+      "sha256": "892555c8b3a55a9893a9ff7989923993e592bdfb9487291fe4ffb757d7484b1e"
+    }
+  ]
+}

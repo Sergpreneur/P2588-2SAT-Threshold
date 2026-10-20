@@ -1,0 +1,4 @@
+'P2588.clause_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'P2588.satisfiable_of_subset' depends on axioms: [propext, Quot.sound]
+'P2588.probability_antitone' depends on axioms: [propext, Classical.choice, Quot.sound]
+'P2588.threshold13_of_enumeration_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]

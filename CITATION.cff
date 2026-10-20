@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use these computational materials, please cite the accompanying preprint."
+type: software
+title: "P2588: A certified median threshold for six-variable random 2-SAT"
+authors:
+  - family-names: Nefedov
+    given-names: Sergey
+    affiliation: "Moscow State University, Mathematics Department"
+repository-code: "https://github.com/Sergpreneur/P2588-2SAT-Threshold"
+abstract: >-
+  Exact coefficient evaluation, independent assignment-mask counting,
+  integer-polynomial certificates and partial Lean 4 verification for the
+  median satisfiability threshold in the six-variable distinct-clause model.
+  The bridge from the Lean certificate coefficients to satisfiable-formula
+  cardinalities remains an explicit hypothesis.
+keywords:
+  - 2-SAT
+  - exact enumeration
+  - proof certificates
+  - Lean 4

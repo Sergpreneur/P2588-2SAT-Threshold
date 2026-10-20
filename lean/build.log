@@ -1,0 +1,12 @@
+✔ [907/911] Built P2588.Arithmetic
+ℹ [908/911] Built P2588.Certificate
+info: ././././P2588/Certificate.lean:90:0: 'P2588.Certificate.coefficient_13' does not depend on any axioms
+info: ././././P2588/Certificate.lean:91:0: 'P2588.Certificate.assembled_polynomial' does not depend on any axioms
+info: ././././P2588/Certificate.lean:92:0: 'P2588.Certificate.square_6' does not depend on any axioms
+info: ././././P2588/Certificate.lean:93:0: 'P2588.Certificate.below_half_13' does not depend on any axioms
+info: ././././P2588/Certificate.lean:94:0: 'P2588.Certificate.first_crossing_for_coefficient' does not depend on any axioms
+ℹ [909/911] Built P2588.Model
+info: ././././P2588/Model.lean:144:0: 'P2588.clause_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././P2588/Model.lean:145:0: 'P2588.satisfiable_of_subset' depends on axioms: [propext, Quot.sound]
+info: ././././P2588/Model.lean:146:0: 'P2588.probability_antitone' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././P2588/Model.lean:147:0: 'P2588.threshold13_of_enumeration_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]

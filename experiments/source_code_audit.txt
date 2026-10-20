@@ -1,0 +1,3 @@
+The directly executed DP source is src/mask_dp.cpp, the in-place increasing-popcount version.
+The unfinished two-buffer run has a separate log and is not used as the final count.
+The compiler binary hash is retained in environment.json; source hashes are in SHA256SUMS.

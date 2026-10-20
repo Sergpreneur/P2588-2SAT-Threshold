@@ -1,0 +1,18 @@
+{
+  "python": "3.12.14",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "flags": [
+    "-O3",
+    "-std=c++17",
+    "-Wall",
+    "-Wextra",
+    "-pedantic"
+  ],
+  "sympy_for_upstream_check": "1.14.0",
+  "direct_dp_binary_sha256": "9a0dd334ae6dc2b32cba893d4b74174f11e1feba8549b15f2de2d149e6c55f4f",
+  "brute_force_binary_sha256": "e077cffd2ebb674fe8dc73342739463bc8ee18e163caf6933f3898102db8f0ab",
+  "direct_dp_completed_seconds": 117.657,
+  "direct_dp_states_final": 24444343,
+  "state_table_hash": "commutative u64 SplitMix64 checksum per step (not a cryptographic hash); see source and step log",
+  "source_and_output_hashes": "SHA256SUMS"
+}

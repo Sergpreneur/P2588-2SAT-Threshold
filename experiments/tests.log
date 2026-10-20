@@ -1,0 +1,9 @@
+test_published_rows_and_totals (test_known_coefficient.PublishedData.test_published_rows_and_totals) ... ok
+test_all_subsets_three_variables (test_small_n.SmallInstances.test_all_subsets_three_variables) ... ok
+test_scc_against_truth_table_six_variables (test_small_n.SmallInstances.test_scc_against_truth_table_six_variables) ... ok
+test_two_buffer_reference_all_degrees (test_small_n.SmallInstances.test_two_buffer_reference_all_degrees) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.611s
+
+OK

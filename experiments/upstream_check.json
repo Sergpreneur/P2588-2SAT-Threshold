@@ -1,0 +1,30 @@
+{
+  "commit": "346079fa8606ebd48f4557bcef7bc1f73a2aed4d",
+  "sympy": "1.14.0",
+  "results": [
+    {
+      "method": "generating_function_count_sat",
+      "n": 6,
+      "m": 12,
+      "count": 805717285720
+    },
+    {
+      "method": "generating_function_count_sat",
+      "n": 6,
+      "m": 13,
+      "count": 2381437338960
+    },
+    {
+      "method": "second_generating_function_count_sat",
+      "n": 6,
+      "m": 12,
+      "count": 805717285720
+    },
+    {
+      "method": "second_generating_function_count_sat",
+      "n": 6,
+      "m": 13,
+      "count": 2381437338960
+    }
+  ]
+}

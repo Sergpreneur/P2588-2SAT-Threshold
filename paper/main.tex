@@ -1,0 +1,296 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\hypersetup{pdftitle={A certified median threshold for six-variable random 2-SAT},pdfauthor={Nefedov Sergey},pdfsubject={P2588: exact coefficient evaluation and independent verification}}
+\usepackage{enumitem}
+\setlist{nosep}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\coeff}[1]{\left[#1\right]}
+\title{A certified median threshold for\newline six-variable random 2-SAT}
+\author{Nefedov Sergey\\\small Moscow State University, Mathematics Department}
+\date{20 October 2026\\\small Version 3: reproducibility repository}
+\begin{document}
+\maketitle
+\begin{abstract}
+We evaluate the number of satisfiable thirteen-clause sets on six labeled Boolean
+variables in the distinct-clause model. The exact count is
+$2\,381\,437\,338\,960$, giving probability
+$9\,922\,655\,579/21\,528\,597\,615<1/2$. Together with the known twelve-clause
+count and monotonicity, this proves that thirteen is the first strict half-probability
+crossing. The evaluation uses the existing enumeration theorem of Dovgal,
+de Panafieu and Ravelomanana and is independently reproduced by a direct
+assignment-mask dynamic program. We supply integer-polynomial certificates,
+source code and executed verification logs. The contribution is a certified finite
+evaluation of existing theory; no new general enumeration theorem is claimed.
+The exact certificate arithmetic, the finite clause model and probability
+monotonicity have also been checked in Lean~4. The identification of the
+certificate coefficients with the satisfiable-formula counts is not yet
+formalized, so the Lean verification is partial.
+\end{abstract}
+
+\section{Model and result}
+Let $\mathcal C_n$ contain the four signed disjunctions on every unordered pair of
+distinct variables from $x_0,\ldots,x_{n-1}$. Thus
+$|\mathcal C_n|=4\binom n2=2n(n-1)$. A formula is an unordered subset of
+$\mathcal C_n$. Variables are labeled; clauses cannot repeat. Write
+\[
+a_{n,m}=\#\{F\subseteq\mathcal C_n: |F|=m,\ F\text{ satisfiable}\},\qquad
+P_{n,m}=\frac{a_{n,m}}{\binom{2n(n-1)}m}.
+\]
+The finite request P2588 of TheoremDB asks for the first $m$ with $P_{6,m}<1/2$.
+
+\begin{theorem}
+In this model the first such value is $m=13$. More precisely,
+\[
+a_{6,12}=805\,717\,285\,720,\qquad
+a_{6,13}=2\,381\,437\,338\,960,
+\]
+and
+\[
+P_{6,13}=\frac{9\,922\,655\,579}{21\,528\,597\,615}
+=0.46090580336205517\ldots.
+\]
+\end{theorem}
+
+The twelve-clause value is in the published table of \cite{DPR}. We reproduced it
+before evaluating the next coefficient. The exact integer comparisons are
+\begin{center}
+\begin{tabular}{r r r}
+\toprule
+$m$ & $\binom{60}m$ & $2a_{6,m}-\binom{60}m$\\
+\midrule
+12 & $1\,399\,358\,844\,975$ & $+212\,075\,726\,465$\\
+13 & $5\,166\,863\,427\,600$ & $-403\,988\,749\,680$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lemma}
+For a fixed finite clause universe of size $C$, satisfiability probabilities of
+uniform clause sets satisfy $P_{m+1}\le P_m$ for $0\le m<C$.
+\end{lemma}
+\begin{proof}
+Choose a uniform $(m+1)$-set and delete a uniformly chosen clause. A fixed $m$-set
+has $C-m$ extensions, and its probability under deletion is
+\[
+\frac{C-m}{(m+1)\binom C{m+1}}=\frac1{\binom C m}.
+\]
+The resulting $m$-set is therefore uniform. Deletion preserves satisfiability,
+so the satisfiability indicator cannot decrease under this coupling. Taking
+expectations proves the claim.
+\end{proof}
+Consequently the two integer comparisons prove the claimed first crossing,
+once the coefficient evaluations below are certified.
+
+\section{Exact coefficient evaluation}
+Set $q=1+w$ and use exponential generating functions in $z$:
+\[
+G(z,w)=\sum_{r\ge0}q^{\binom r2}\frac{z^r}{r!},\qquad
+H=G^{-1},\qquad E=G\odot_z H,\qquad A=\sqrt E,
+\]
+where $A(0,w)=1$ and $\odot_z$ is the exponential Hadamard product. Theorem~4.7
+of \cite{DPR} gives, writing $A_r=r!\coeff{z^r}A$,
+\begin{equation}\label{eq:count}
+a_{n,m}=\coeff{w^m}\,2^n\sum_{k=0}^n\binom nk
+q^{2(n-1)k-\binom k2}A_{n-k}(w).
+\end{equation}
+This is the source enumeration theorem, not a new formula of this note.
+The normalization distinguishes labeled variables, unordered clause sets and
+exponential coefficients explicitly.
+
+For $H_r=r!\coeff{z^r}H$ and $E_r=q^{\binom r2}H_r$, formal inversion and
+square-root extraction give
+\begin{align}
+H_0&=1,& H_r&=-\sum_{j=1}^r\binom rj q^{\binom j2}H_{r-j},\label{eq:inv}\\
+A_0&=1,&2A_r&=E_r-\sum_{j=1}^{r-1}\binom rj A_jA_{r-j}.\label{eq:sqrt}
+\end{align}
+The primary implementation evaluates these identities as full polynomials in
+$w$ over $\mathbb Q$, with exact rational arithmetic. Coefficients above $z^n$
+cannot affect the requested result: each recurrence for degree $r$ uses only
+degrees at most $r$. All $w$-degrees were retained, so no truncation in the clause
+variable is involved. Full rows were computed for $n\le7$.
+
+\subsection{An integer certificate}
+A separately written evaluator uses ordinary powers of $q$ and the scaled
+coefficients $R_r=2^r A_r$. Then
+\begin{equation}\label{eq:scaled}
+R_0=1,\qquad
+2R_r=2^r E_r-\sum_{j=1}^{r-1}\binom rj R_jR_{r-j}.
+\end{equation}
+The final polynomial and its coefficient transform are
+\begin{align}
+S_n(q)&=\sum_{k=0}^n2^k\binom nk
+q^{2(n-1)k-\binom k2}R_{n-k}(q),\\
+a_{n,m}&=\sum_{j\ge m}\coeff{q^j}S_n(q)\binom jm.\label{eq:transform}
+\end{align}
+The stored certificate contains the integer coefficient arrays $H_r,E_r,R_r,S_r$.
+The stand-alone checker verifies $GH=1$, the Hadamard identity and
+$R(z)^2=E(2z)$, then checks \eqref{eq:count}--\eqref{eq:transform} and all saved
+coefficient rows. It imports neither evaluator and needs no symbolic algebra
+package. Uniqueness of the formal inverse and the square root with constant
+coefficient~1 justifies the finite identity certificate.
+
+\section{Independent direct enumeration}
+The second counting method uses no generating functions. Encode the $64$ truth
+assignments by bits of a 64-bit unsigned integer. For a clause $c$, let $M(c)$
+have a bit precisely at assignments satisfying $c$. Each clause mask has $48$
+bits. The solution set of a formula is exactly $\bigcap_{c\in F}M(c)$.
+
+After the first $i$ clauses, let $D_i(M,k)$ count $k$-element subsets with exact
+solution mask $M$. Initially $D_0(\mathrm{ALL},0)=1$. Every clause produces the
+two transitions
+\[
+(M,k)\longrightarrow(M,k),\qquad
+(M,k)\longrightarrow(M\mathbin{\&}M(c),k+1).
+\]
+The two alternatives partition all subsets by absence or presence of the new
+clause. Induction therefore proves that the DP counts each labeled clause set
+exactly once. Equal masks are merged by addition of multiplicities, not by
+identification of formulas. An empty mask can be discarded permanently;
+degrees above~13 can also be discarded.
+
+\paragraph{In-place evaluation.}
+To reduce memory, take a snapshot of the existing state nodes before each clause
+and process them in increasing mask population count. A changed mask is a proper
+subset and has strictly smaller population count. Its node is therefore already
+processed or is new and absent from the snapshot. Hence no earlier transition
+can alter the source polynomial before it is read. If the mask is fixed, update
+degrees in decreasing order, multiplying its polynomial by $1+w$. This implements
+the same recurrence as the simple two-buffer reference program.
+
+For $k\le13$, every count is bounded by $\binom{60}{13}<2^{64}$, so the counting
+arithmetic cannot overflow. The state checksums intentionally use arithmetic
+modulo $2^{64}$ and play no role in the counts.
+
+\paragraph{Executed output.}
+All $60$ steps completed. There were $24\,444\,343$ nonempty final masks; the last
+step was recorded at $117.657$ seconds. All fourteen counts, $0\le m\le13$,
+agreed with the primary calculation. The final two entries were exactly the
+values in Theorem~1. The run logs retain a deterministic order-independent
+64-bit checksum for every state table. SHA-256 digests cover distributed source,
+certificates, logs and outputs. The large state tables are regenerated on demand
+and are not distributed; the 64-bit checksums are not cryptographic certificates.
+
+\subsection{Additional executed checks}
+\begin{itemize}
+\item Every one of the $2^{24}=16\,777\,216$ clause sets at $n=4$ was enumerated
+separately. The complete row agrees in all $25$ degrees. A simple two-buffer
+Python DP also agrees for every degree at $n\le4$.
+\item For all $4096$ formulas at $n=3$, truth-table satisfiability agrees with
+the implication-graph SCC criterion. A further fixed-seed test checks $1220$
+formulas at $n=6$. These tests are not probability estimates.
+\item Both unmodified coefficient functions from the pinned upstream code were
+executed at $(6,12)$ and $(6,13)$ and returned the same counts.
+\item The published totals for $n\le7$ were reproduced. In particular,
+\[\sum_m a_{6,m}=2\,034\,602\,766\,692\,687.\]
+Its complement is
+$1\,150\,886\,901\,840\,154\,289$, and the two sum to $2^{60}$.
+\end{itemize}
+
+\section{Reproducibility and scope}
+The intended repository URL for these materials is
+\begin{center}
+\url{https://github.com/Sergpreneur/P2588-2SAT-Threshold}.
+\end{center}
+Public upload is pending for this version; the accompanying archive contains
+the complete materials prepared for that repository.
+The package includes both polynomial evaluators, the independent C++ mask DP,
+the exhaustive checker, full data, certificates, logs, version information and
+the Russian report. From the package root:
+\begin{verbatim}
+python3 verify/verify_count.py
+python3 -m unittest discover -s tests -v
+python3 verify/verify_count.py --rerun-dp
+\end{verbatim}
+The first command verifies the compact certificate and saved outputs; the last
+also recompiles and reexecutes the independent large DP. The recorded
+environment used Python~3.12.14 and g++~13.3.0 with \texttt{-O3 -std=c++17}.
+SymPy~1.14.0 was used only to run upstream code. The main programs and the compact
+checker use the Python standard library. The C++ DP requires several GiB of
+memory. These computational checks are complemented by the partial Lean
+verification described below.
+
+\section{Lean 4 verification and its scope}\label{sec:lean}
+The accompanying formal project was compiled with Lean~4.19.0 and mathlib
+v4.19.0. The pinned mathlib revision is
+\begin{center}\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.\end{center}
+The standard
+\texttt{lake build} completed successfully; the build and axiom reports are
+included in the \texttt{lean/} directory, together with the formal sources.
+
+The arithmetic modules check the finite integer-polynomial identities for
+$H_r,E_r,R_r$ through degree six, the assembly of $S_6$, the binomial transforms
+at twelve and thirteen clauses, both binomial denominators, the exact signed
+gaps, and the reduced probability. They also check every strict above-half
+comparison for the coefficients at $0\le m<13$. These modules depend only on
+Lean's standard library and use ordinary \texttt{decide}, whose proof terms
+are checked by the kernel. The reported arithmetic theorems have no axiom
+dependencies; neither \texttt{native\_decide} nor an external computational
+oracle is used.
+
+The separate model module defines a clause by a variable pair $i<j$ and two
+Boolean signs, represents formulas as finite sets, and defines satisfiability
+by an existential truth assignment. Lean proves that the clause universe has
+cardinality sixty and that there are $\binom{60}{m}$ formulas of size $m$.
+It also proves deletion preserves satisfiability and that the corresponding
+probability is nonincreasing. This last proof uses the local
+Lubell--Yamamoto--Meshalkin inequality from mathlib. Its axiom dependencies are
+the standard \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}.
+There are no admitted proof terms or new enumeration axioms.
+
+The remaining formal gap is explicit. Writing \texttt{satCount} for the count
+of satisfiable formulas in the Lean model, the final theorem
+\texttt{threshold13\_of\_enumeration\_bridge} assumes
+\[
+\begin{split}
+\texttt{satCount}(12)&=\coeff{w^{12}}S_6(1+w),\\
+\texttt{satCount}(13)&=\coeff{w^{13}}S_6(1+w).
+\end{split}
+\]
+Under these hypotheses it proves that thirteen is the first strict crossing.
+The hypotheses are not proved inside Lean: the specialization of the source
+enumeration theorem, or a verified counting procedure connecting the coefficient
+certificate to this finite model, remains to be formalized. Thus the numerical
+and monotonicity parts are kernel-checked, while the complete counting argument
+and the unconditional threshold theorem are not yet fully formalized in Lean.
+The mathematical result rests on \cite{DPR} and the independent executed
+enumeration described above.
+
+\paragraph{Literature and priority.}
+The general counting problem is already solved by \cite{DPR}. The latest
+displayed arXiv version was v2, and the inspected GitLab master head remained
+commit \texttt{346079fa8606ebd48f4557bcef7bc1f73a2aed4d}. Its notebook displays
+the row only through $m=12$, but also computes totals by summing all degrees.
+Thus it already evaluated $a_{6,13}$ internally. A bounded search found no separate
+printed value for this coefficient, which does not establish priority. This note
+provides an explicit certified evaluation and closes the finite condition in
+P2588; it does not claim a new general theorem or a new asymptotic 2-SAT threshold.
+The primary journal article is article~7, correcting article~8 in the supplied
+problem metadata.
+
+\paragraph{AI assistance.}
+ChatGPT (OpenAI) was used to derive and implement the exact recurrences, design the
+independent verification, execute computations, audit sources and draft this
+note. The mathematical argument and computational claims should be assessed
+from the supplied code and certificates. The exact scope of the Lean checks
+is stated in Section~\ref{sec:lean}. This version records no journal submission.
+
+\begin{thebibliography}{9}
+\bibitem{DPR} S. Dovgal, E. de Panafieu and V. Ravelomanana.
+\emph{Exact enumeration of satisfiable 2-SAT formulae}.
+Combinatorial Theory \textbf{3}(2) (2023), article~7.
+\href{https://doi.org/10.5070/C63261985}{doi:10.5070/C63261985}.
+\href{https://arxiv.org/abs/2108.08067v2}{arXiv:2108.08067v2}.
+\bibitem{code} S. Dovgal and E. de Panafieu. Companion repository,
+\emph{Enumeration-2sat-aux}, commit
+\texttt{346079fa8606ebd48f4557bcef7bc1f73a2aed4d}.
+\url{https://gitlab.com/sergey-dovgal/enumeration-2sat-aux}.
+\bibitem{problem} TheoremDB contributors. P2588,
+\emph{Median satisfiability threshold for a six-variable clause set}.
+\url{https://theoremdb.org/statements/P2588/}. Accessed 20 October 2026.
+\end{thebibliography}
+\end{document}

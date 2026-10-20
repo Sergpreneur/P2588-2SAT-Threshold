@@ -1,0 +1,53 @@
+{
+  "problem": "P2588",
+  "status": "COMPUTATIONALLY CERTIFIED",
+  "first_strict_half_crossing": 13,
+  "n6": {
+    "12": {
+      "count": 805717285720,
+      "denominator": 1399358844975,
+      "twice_count_minus_denominator": 212075726465,
+      "reduced_probability": [
+        5556670936,
+        9650750655
+      ],
+      "decimal_for_display_only": "0.5757760338695643"
+    },
+    "13": {
+      "count": 2381437338960,
+      "denominator": 5166863427600,
+      "twice_count_minus_denominator": -403988749680,
+      "reduced_probability": [
+        9922655579,
+        21528597615
+      ],
+      "decimal_for_display_only": "0.46090580336205517"
+    }
+  },
+  "independent_dp": {
+    "n": 6,
+    "m_max": 13,
+    "states": 24444343,
+    "rolling_hash_u64": "17215577115177045709",
+    "counts": [
+      1,
+      60,
+      1770,
+      34220,
+      487500,
+      5451072,
+      49675760,
+      377136960,
+      2411974740,
+      13063104000,
+      60169952412,
+      237115483560,
+      805717285720,
+      2381437338960
+    ]
+  },
+  "lean_kernel_checked": false,
+  "lean_partial_status": "Lean 4.19.0 checks certificate arithmetic, finite model and monotonicity; the bridge to satisfiable-formula counts remains a hypothesis. No complete kernel proof of the original threshold is claimed.",
+  "priority": "coefficient evaluation and independent verification of a corollary of an existing theorem; first-publication priority not established",
+  "clause_order_sha256": "62678bd5817aad0ad7221378cdb0c32977c5c8b51feca91b71bff07e8e0e4380"
+}
